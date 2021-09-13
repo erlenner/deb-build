@@ -1,12 +1,17 @@
 #!/bin/bash
 
-apt-get update && apt-get source ros-gencpp
+PACKAGE=ros-noetic-gencpp
 
-cd ros-gencpp-*
+apt-get update && apt-get source $PACKAGE
+
+cd $PACKAGE-*
 QUILT_PATCHES=debian/patches quilt import /host/0001-remove-constructors-in-message-template.patch /host/0001-fix-deprecated-std-allocator-rebind-usage.patch 
 cat /host/gencpp_changelog_entry debian/changelog > tmp_changelog && mv tmp_changelog debian/changelog
-debuild -S && \
-debsign -k 0C57A413D27CE91083A40BB3F16FD948B3FEBD64 ../ros-gencpp*.changes
-dput ppa:noillians/ros ../ros-gencpp*.changes
+debuild && \
+cp ../$PACKAGE*.deb /host \
+&& echo built ../$PACKAGE*.deb
+#debuild -S -sa && \
+#debsign -k 0C57A413D27CE91083A40BB3F16FD948B3FEBD64 ../$PACKAGE*.changes && \
+#dput ppa:noillians/ros ../$PACKAGE*.changes
 
 exec /bin/bash

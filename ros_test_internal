@@ -1,5 +1,13 @@
 #!/bin/bash
 
-apt-get update && apt-get install -y ros-noetic-ros-base
+#add-apt-repository -y ppa:noillians/ros \
+#  && apt-get update \
+#  && apt-get install -y ros-noetic-roscpp-serialization ros-noetic-gencpp
+
+dpkg -i /host/ros-noetic-*.deb
+
+ROS_FLAGS="-I/opt/ros/noetic/include/ -L/opt/ros/noetic/lib -lroscpp -lrosconsole -lrosconsole_backend_interface -lrosconsole_log4cxx -lroscpp_serialization -lxmlrpcpp -lrostime -lcpp_common"
+
+g++-10 -std=c++20 /host/ros_test.cpp $ROS_FLAGS -o run_test.out
 
 exec /bin/bash

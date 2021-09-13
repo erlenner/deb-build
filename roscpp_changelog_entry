@@ -1,5 +1,5 @@
-ros-roscpp-core (0.6.13-1ubuntu1) focal; urgency=medium
-
+ros-noetic-roscpp-serialization (0.7.2-2focal) focal; urgency=medium
+  
   * Remove deprecated std::allocator::rebind usage
 
  -- Erlend Eriksen <erlend_ne@hotmail.com>  Mon, 13 Sep 2021 12:25:09 +0200

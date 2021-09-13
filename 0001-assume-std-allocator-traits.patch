@@ -4,19 +4,19 @@ Date: Mon, 13 Sep 2021 12:16:58 +0200
 Subject: [PATCH] assume std allocator traits
 
 ---
- roscpp_serialization/include/ros/serialization.h | 6 +++---
+ include/ros/serialization.h | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/roscpp_serialization/include/ros/serialization.h b/roscpp_serialization/include/ros/serialization.h
+diff --git a/include/ros/serialization.h b/include/ros/serialization.h
 index 7daee97f..271a053e 100644
---- a/roscpp_serialization/include/ros/serialization.h
-+++ b/roscpp_serialization/include/ros/serialization.h
+--- a/include/ros/serialization.h
++++ b/include/ros/serialization.h
 @@ -332,7 +332,7 @@ struct VectorSerializer
  template<typename T, class ContainerAllocator>
  struct VectorSerializer<T, ContainerAllocator, typename boost::disable_if<mt::IsFixedSize<T> >::type >
  {
 -  typedef std::vector<T, typename ContainerAllocator::template rebind<T>::other> VecType;
-+  typedef std::vector<T, typename ContainerAllocator> VecType;
++  typedef std::vector<T, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<T>> VecType;
    typedef typename VecType::iterator IteratorType;
    typedef typename VecType::const_iterator ConstIteratorType;
  
@@ -25,7 +25,7 @@ index 7daee97f..271a053e 100644
  struct VectorSerializer<T, ContainerAllocator, typename boost::enable_if<mt::IsSimple<T> >::type >
  {
 -  typedef std::vector<T, typename ContainerAllocator::template rebind<T>::other> VecType;
-+  typedef std::vector<T, typename ContainerAllocator> VecType;
++  typedef std::vector<T, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<T>> VecType;
    typedef typename VecType::iterator IteratorType;
    typedef typename VecType::const_iterator ConstIteratorType;
  
@@ -34,7 +34,7 @@ index 7daee97f..271a053e 100644
  struct VectorSerializer<T, ContainerAllocator, typename boost::enable_if<mpl::and_<mt::IsFixedSize<T>, mpl::not_<mt::IsSimple<T> > > >::type >
  {
 -  typedef std::vector<T, typename ContainerAllocator::template rebind<T>::other> VecType;
-+  typedef std::vector<T, typename ContainerAllocator> VecType;
++  typedef std::vector<T, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<T>> VecType;
    typedef typename VecType::iterator IteratorType;
    typedef typename VecType::const_iterator ConstIteratorType;
  
