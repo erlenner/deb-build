@@ -1,0 +1,8 @@
+ros-gencpp (0.6.2-4ubuntu1) focal; urgency=medium
+  
+  * Remove deprecated std::allocator::rebind usage
+
+  * Make messages aggregate initializable
+
+ -- Erlend Eriksen <erlend_ne@hotmail.com>  Mon, 13 Sep 2021 14:14:19 +0200
+

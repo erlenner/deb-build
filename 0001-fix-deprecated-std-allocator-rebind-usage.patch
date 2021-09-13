@@ -1,0 +1,47 @@
+From f838a7ea63c79cb92bb0d67d07a38a67471d9dfb Mon Sep 17 00:00:00 2001
+From: Erlend Eriksen <erlend_ne@hotmail.com>
+Date: Mon, 13 Sep 2021 14:48:25 +0200
+Subject: [PATCH] fix deprecated std::allocator::rebind usage
+
+---
+ scripts/msg.h.template | 1 +
+ src/gencpp/__init__.py | 4 ++--
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/scripts/msg.h.template b/scripts/msg.h.template
+index 99047a0..649d29e 100644
+--- a/scripts/msg.h.template
++++ b/scripts/msg.h.template
+@@ -39,6 +39,7 @@ has_plugin_after = os.path.exists('include/%s/plugin/%s.after.h' % (spec.package
+ #include <string>
+ #include <vector>
+ #include <map>
++#include <memory>
+ 
+ #include <ros/types.h>
+ #include <ros/serialization.h>
+diff --git a/src/gencpp/__init__.py b/src/gencpp/__init__.py
+index 3846100..cb8dbdf 100644
+--- a/src/gencpp/__init__.py
++++ b/src/gencpp/__init__.py
+@@ -50,7 +50,7 @@ MSG_TYPE_TO_CPP = {'byte': 'int8_t',
+                     'int64': 'int64_t',
+                    'float32': 'float',
+                    'float64': 'double',
+-                   'string': 'std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other > ',
++                   'string': 'std::basic_string<char, std::char_traits<char>, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<char>>',
+                    'time': 'ros::Time',
+                    'duration': 'ros::Duration'}
+ 
+@@ -81,7 +81,7 @@ def msg_type_to_cpp(type):
+ 
+     if (is_array):
+         if (array_len is None):
+-            return 'std::vector<%s, typename ContainerAllocator::template rebind<%s>::other > '%(cpp_type, cpp_type)
++            return 'std::vector<%s, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<%s>>'%(cpp_type, cpp_type)
+         else:
+             return 'boost::array<%s, %s> '%(cpp_type, array_len)
+     else:
+-- 
+2.32.0
+

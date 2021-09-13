@@ -1,0 +1,45 @@
+From d5adb180e5606fbaab0aabd80598b709a626efb7 Mon Sep 17 00:00:00 2001
+From: Erlend Eriksen <erlend_ne@hotmail.com>
+Date: Fri, 3 Sep 2021 18:01:01 +0200
+Subject: [PATCH] remove constructors in message template
+
+---
+ scripts/msg.h.template | 22 ----------------------
+ 1 file changed, 22 deletions(-)
+
+diff --git a/scripts/msg.h.template b/scripts/msg.h.template
+index c9f39ca..a7b78a6 100644
+--- a/scripts/msg.h.template
++++ b/scripts/msg.h.template
+@@ -75,28 +75,6 @@ struct @(spec.short_name)_
+ {
+   typedef @(spec.short_name)_<ContainerAllocator> Type;
+ 
+-@# constructors (with and without allocator)
+-@[if has_plugin]@
+-#ifdef @(spec.package.upper())_MESSAGE_@(spec.short_name.upper())_PLUGIN_CONSTRUCTOR
+-  @(spec.package.upper())_MESSAGE_@(spec.short_name.upper())_PLUGIN_CONSTRUCTOR
+-#else
+-@[end if]@
+-@[for (alloc_type,alloc_name) in [['',''],['const ContainerAllocator& ','_alloc']]]@
+-  @(spec.short_name)_(@(alloc_type+alloc_name))
+-@# Write initializer list
+-  @('\n  '.join(gencpp.generate_initializer_list(spec, alloc_name != '' )))@
+-  {
+-@# Fixed length arrays
+-@[if alloc_name != '' and not [f for f in spec.parsed_fields() if f.is_array and f.array_len is not None and f.base_type == 'string']]@
+-  (void)_alloc;
+-@[end if]@
+-  @('\n  '.join(gencpp.generate_fixed_length_assigns(spec, alloc_name != '', '%s::'%(spec.package))))@
+-  }
+-@[end for]
+-@[if has_plugin]@
+-#endif
+-@[end if]@
+-
+ @[for field in spec.parsed_fields()]
+  @{cpp_type = gencpp.msg_type_to_cpp(field.type)}@
+   typedef @(cpp_type) _@(field.name)_type;
+-- 
+2.32.0
+

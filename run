@@ -1,0 +1,2 @@
+#!/bin/bash
+docker run --rm -u0 -v $(pwd):/host -it ubunturef:latest /bin/bash 

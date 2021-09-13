@@ -1,0 +1,2 @@
+#!/bin/bash
+./run_internal /host/ros_test_internal

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+apt-get update && apt-get source ros-gencpp
+
+cd ros-gencpp-*
+QUILT_PATCHES=debian/patches quilt import /host/0001-remove-constructors-in-message-template.patch /host/0001-fix-deprecated-std-allocator-rebind-usage.patch 
+cat /host/gencpp_changelog_entry debian/changelog > tmp_changelog && mv tmp_changelog debian/changelog
+debuild -S && \
+debsign -k 0C57A413D27CE91083A40BB3F16FD948B3FEBD64 ../ros-gencpp*.changes
+dput ppa:noillians/ros ../ros-gencpp*.changes
+
+exec /bin/bash

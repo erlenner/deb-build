@@ -1,0 +1,12 @@
+#!/bin/bash
+
+apt-get update && apt-get source ros-roscpp-core
+
+cd ros-roscpp-core-*
+QUILT_PATCHES=debian/patches quilt import /host/0001-assume-std-allocator-traits.patch
+cat /host/roscpp_changelog_entry debian/changelog > tmp_changelog && mv tmp_changelog debian/changelog
+debuild -S && \
+debsign -k 0C57A413D27CE91083A40BB3F16FD948B3FEBD64 ../ros-roscpp-core*.changes && \
+dput ppa:noillians/ros ../ros-roscpp-core*.changes
+
+exec /bin/bash
