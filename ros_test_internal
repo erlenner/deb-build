@@ -6,6 +6,8 @@
 
 dpkg -i /host/ros-noetic-*.deb
 
+. /opt/ros/noetic/setup.bash
+
 ROS_FLAGS="-I/opt/ros/noetic/include/ -L/opt/ros/noetic/lib -lroscpp -lrosconsole -lrosconsole_backend_interface -lrosconsole_log4cxx -lroscpp_serialization -lxmlrpcpp -lrostime -lcpp_common"
 
 g++-10 -std=c++20 /host/ros_test.cpp $ROS_FLAGS -o run_test.out

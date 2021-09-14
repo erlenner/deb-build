@@ -1,0 +1,17 @@
+#!/bin/bash
+
+PACKAGE=$1
+
+dpkg -i /host/ros-noetic-*.deb
+
+apt-get update && apt-get source $PACKAGE
+
+cd $PACKAGE-*
+echo "$PACKAGE ()
+"
+DEBEMAIL="Erlend Eriksen <erlend_ne@hotmail.com>" dch -D focal -U "Use aggregate messages"
+debuild && \
+cp ../$PACKAGE*.deb /host \
+&& echo built ../$PACKAGE*.deb
+
+exec /bin/bash

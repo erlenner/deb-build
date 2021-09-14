@@ -1,0 +1,2 @@
+#!/bin/bash
+./run_internal /host/deb_from_debs_internal $1

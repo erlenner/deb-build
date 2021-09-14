@@ -1,2 +1,2 @@
 #!/bin/bash
-docker run --rm -u0 -v $(pwd):/host -v ~/.gnupg:/root/.gnupg -it ubunturef:latest $1
+docker run --rm -u0 -v $(pwd):/host -v ~/.gnupg:/root/.gnupg -it ubunturef:latest $@
